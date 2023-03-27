@@ -9,6 +9,7 @@
   "author": "jeonjuseong11",
   "license": "ISC",
   "dependencies": {
-    "next": "^9.5.5"
+    "next": "^9.5.5",
+    "prop-types": "^15.8.1"
   }
 }
