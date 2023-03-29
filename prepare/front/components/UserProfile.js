@@ -1,4 +1,5 @@
-import { Avatar, Button, Card } from "antd";
+import { Avatar, Card, Button } from "antd";
+import Meta from "antd/lib/card/Meta";
 import React, { useCallback } from "react";
 const UserProfile = ({ setIsLoggedIn }) => {
   const onLogOut = useCallback(() => {
@@ -21,8 +22,11 @@ const UserProfile = ({ setIsLoggedIn }) => {
         </div>,
       ]}
     >
-      <Card.Meta avatar={<Avatar>JS</Avatar>} title="JuSeong" />
-      <Button onClick={onLogOut}>로그아웃</Button>
+      <Meta
+        avatar={<Avatar>JS</Avatar>}
+        title="JuSeong"
+        description={<Button onClick={onLogOut}>로그아웃</Button>}
+      />
     </Card>
   );
 };
