@@ -3,7 +3,7 @@ import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../reducers/post";
 const PostForm = () => {
-  const { imagePath } = useSelector((state) => state.post);
+  const { imagePaths } = useSelector((state) => state.post);
   const imageInput = useRef();
   const dispatch = useDispatch();
   const [text, setText] = useState("");
@@ -28,7 +28,7 @@ const PostForm = () => {
         onChange={onChangeText}
         maxLength={140}
         placeholder={"오늘은 무슨일이 있었나요?"}
-      ></Input.TextArea>
+      />
       <div>
         <input type="file" mutiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
@@ -37,7 +37,7 @@ const PostForm = () => {
         </Button>
       </div>
       <div>
-        {imagePath.map((v) => (
+        {imagePaths.map((v) => (
           <div key={v} style={{ display: "inline-block" }}>
             <img src={v} style={{ width: "200px" }} alt={v} />
             <div>

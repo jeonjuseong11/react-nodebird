@@ -4,40 +4,49 @@ export const initialState = {
       id: 1,
       User: {
         id: 1,
-        nickname: "jeo",
+        nickname: "JuSeong",
       },
-      content: "첫번째 게시글 #헤시태그1 #헤시태그2",
+      content: "첫 번째 게시글",
       Images: [
         {
-          src: "https://bootthumb=phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
+          src: "https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
+        },
+        {
+          src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
+        },
+        {
+          src: "https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg",
         },
       ],
       Comments: [
         {
-          user: {
+          User: {
             nickname: "nero",
           },
-          content: "테스크 댓글1",
+          content: "우와 개정판이 나왔군요~",
         },
         {
-          user: {
-            nickname: "hoer",
+          User: {
+            nickname: "hero",
           },
-          content: "테스크 댓글2",
+          content: "얼른 사고싶어요~",
         },
       ],
     },
   ],
-  imagePath: [],
+  imagePaths: [],
   postAdded: false,
 };
+
 const ADD_POST = "ADD_POST";
+
 export const addPost = {
   type: ADD_POST,
 };
+
 const dummyPost = {
   id: 2,
-  content: "더미테이터입니다",
+  content: "더미데이터입니다.",
   User: {
     id: 1,
     nickname: "JuSeong",
@@ -45,16 +54,20 @@ const dummyPost = {
   Images: [],
   Comments: [],
 };
-const reducer = (state = initialState, action) => {
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST:
+    case ADD_POST: {
       return {
         ...state,
         mainPosts: [dummyPost, ...state.mainPosts],
         postAdded: true,
       };
-    default:
-      return state;
+    }
+    default: {
+      return {
+        ...state,
+      };
+    }
   }
 };
-export default reducer;
