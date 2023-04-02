@@ -6,10 +6,16 @@ import { Col, Input, Menu, Row } from "antd";
 import UserProfile from "../components/UserProfile";
 import LoginForm from "../components/LoginForm";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
+`;
+const Global = createGlobalStyle`
+.ant-row{
+  margin-right:0 | important'
+  margin-left:0|important
+}
 `;
 
 const AppLayout = ({ children }) => {
