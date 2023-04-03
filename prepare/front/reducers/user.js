@@ -6,13 +6,51 @@ export const initialState = {
     loginData: {},
   },
 };
-export const loginAction = (data) => {
+//redux-thunk
+// export const loginAction = (data) => {
+//   return (dispatch, getState) => {
+//     const state = getState();
+//     dispatch(loginRequestAction());
+//     axios
+//       .post("/api/login")
+//       .then((res) => {
+//         dispatch(loginSuccessAction(res.data));
+//       })
+//       .catch((err) => {
+//         dispatch(LoginFailureAction(err));
+//       });
+//   };
+// };
+
+export const loginRequestAction = (data) => {
   return {
     type: "LOG_IN",
     data,
   };
 };
-export const logoutAction = () => {
+export const loginSuccessAction = (data) => {
+  return {
+    type: "LOG_IN",
+    data,
+  };
+};
+export const LoginFailureAction = (data) => {
+  return {
+    type: "LOG_IN",
+    data,
+  };
+};
+export const logoutRequestAction = () => {
+  return {
+    type: "LOG_OUT",
+  };
+};
+export const logoutSuccessAction = () => {
+  return {
+    type: "LOG_OUT",
+  };
+};
+export const logoutFailureAction = () => {
   return {
     type: "LOG_OUT",
   };
