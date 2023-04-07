@@ -1,24 +1,29 @@
 import produce from "immer";
 
 export const initialState = {
-  user: {
-    logInLoading: false,
-    logInDone: false, //로그인 시도중 (true이면 로딩창 띠우기)
-    logInError: null,
-    logOutLoading: false, //로그아웃 시도중
-    logOutDone: false,
-    logOutError: null,
-    signUpLoading: false, //회원가입 시도중
-    signUpDone: false,
-    signUpError: null,
-    changeNicknameLoading: false, //닉네임 변경 시도중
-    changeNicknameDone: false,
-    changeNicknameError: null,
-    me: null,
-    signUpData: {},
-    loginData: {},
-  },
+  followLoading: false, // 팔로우 시도중
+  followDone: false,
+  followError: null,
+  unfollowLoading: false, // 언팔로우 시도중
+  unfollowDone: false,
+  unfollowError: null,
+  logInLoading: false, // 로그인 시도중
+  logInDone: false,
+  logInError: null,
+  logOutLoading: false, // 로그아웃 시도중
+  logOutDone: false,
+  logOutError: null,
+  signUpLoading: false, // 회원가입 시도중
+  signUpDone: false,
+  signUpError: null,
+  changeNicknameLoading: false, // 닉네임 변경 시도중
+  changeNicknameDone: false,
+  changeNicknameError: null,
+  me: null,
+  signUpData: {},
+  loginData: {},
 };
+
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
@@ -50,31 +55,27 @@ const dummyUser = (data) => ({
   ...data,
   nickname: "JEO",
   id: 1,
-  Posts: [{ id: 1 }], //스퀄러아 저에서 합쳐주기때문에 대문자로
+  Posts: [{ id: 1 }],
   Followings: [
-    { nickname: "test1" },
-    { nickname: "test2" },
-    { nickname: "test3" },
+    { nickname: "부기초" },
+    { nickname: "Chanho Lee" },
+    { nickname: "neue zeal" },
   ],
   Followers: [
-    { nickname: "test1" },
-    { nickname: "test2" },
-    { nickname: "test3" },
+    { nickname: "부기초" },
+    { nickname: "Chanho Lee" },
+    { nickname: "neue zeal" },
   ],
 });
 
-export const loginRequestAction = (data) => {
-  return {
-    type: LOG_IN_REQUEST,
-    data,
-  };
-};
+export const loginRequestAction = (data) => ({
+  type: LOG_IN_REQUEST,
+  data,
+});
 
-export const logoutRequestAction = () => {
-  return {
-    type: LOG_OUT_REQUEST,
-  };
-};
+export const logoutRequestAction = () => ({
+  type: LOG_OUT_REQUEST,
+});
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {

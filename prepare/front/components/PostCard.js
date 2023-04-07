@@ -16,6 +16,7 @@ import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import PostImages from "./PostImages";
 import { REMOVE_POST_REQUEST } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 const CardWrapper = styled.div`
   margin-bottom: 20px;
@@ -64,7 +65,7 @@ const PostCard = ({ post }) => {
             key="ellipsis"
             content={
               <Button.Group>
-                {id && post.User.id === id ? (
+                {id && post.UserId === id ? (
                   <>
                     <Button>수정</Button>
                     <Button
@@ -84,6 +85,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
@@ -134,4 +136,5 @@ PostCard.propTypes = {
     Images: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,
 };
+
 export default PostCard;
