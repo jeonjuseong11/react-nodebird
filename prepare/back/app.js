@@ -1,15 +1,39 @@
-const http = require("http");
-const server = http.createServer((req, res) => {
-  console.log(req.url, req.method);
-  if (req.method === "GET") {
-    if (req.url === "/api/posts") {
-    }
-  } else if (req.method === "POST") {
-  } else if (req.method === "DELETE") {
-  }
-  res.write("<h1>Hello node1</h1>");
-  res.end("Hello node5");
+const express = require("express");
+const postRouter = require("./routes/post");
+
+const app = express();
+
+// app.get -> 가져오다
+// app.post-> 생성하다
+// app.put -> 전체 수정
+// app.delete -> 제거
+// app.patch -> 부분 수정
+// app.options -> 찔러보기
+// app.head -> 헤더만 가져오기
+
+app.get("/", (req, res) => {
+  res.send("hello express");
 });
-server.listen(3065, () => {
+app.get("/", (req, res) => {
+  res.send("hello api");
+});
+app.get("/posts", (req, res) => {
+  res.json([
+    {
+      id: 1,
+      content: "hello",
+    },
+    {
+      id: 2,
+      content: "hello2",
+    },
+    {
+      id: 3,
+      content: "hello3",
+    },
+  ]);
+});
+app.use("/post", postRouter);
+app.listen(3065, () => {
   console.log("서버 실행 중");
 });
