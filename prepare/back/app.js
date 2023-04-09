@@ -1,8 +1,25 @@
 const express = require("express");
+const db = require("./models");
 const postRouter = require("./routes/post");
+const userRouter = require("./routes/user");
+const cors = require("cors");
 
 const app = express();
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("db 연결 성공");
+  })
+  .catch(console.log(console.error));
 
+app.use(
+  cors({
+    origin: true, //보낸 곳의 주소가 자동으로 들어가 편리
+    credentials: false, //
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //form데이터 처리 방법
 // app.get -> 가져오다
 // app.post-> 생성하다
 // app.put -> 전체 수정
@@ -33,7 +50,9 @@ app.get("/posts", (req, res) => {
     },
   ]);
 });
+app.use("/user", userRouter);
 app.use("/post", postRouter);
+
 app.listen(3065, () => {
   console.log("서버 실행 중");
 });
