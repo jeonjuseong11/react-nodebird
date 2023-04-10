@@ -1,8 +1,16 @@
 const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const dotenv = require("dotenv");
+
 const db = require("./models");
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
-const cors = require("cors");
+const passportConfig = require("./passport");
+
+dotenv.config(); //process.env.이름을 하면 .env파일로 가서 그 값으로 치환됨
 
 const app = express();
 db.sequelize
@@ -11,15 +19,26 @@ db.sequelize
     console.log("db 연결 성공");
   })
   .catch(console.log(console.error));
+passportConfig();
 
 app.use(
   cors({
     origin: true, //보낸 곳의 주소가 자동으로 들어가 편리
-    credentials: false, //
+    credentials: false,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //form데이터 처리 방법
+app.use(express.json()); //json 형식의 데이터가 들어왔을 때 req.body안에 넣어줌
+app.use(express.urlencoded({ extended: true })); //form submit 했을때 데이터를 req.body에 넣어줌
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET, //쿠키의 랜덤한 문자열을 받아오기 위한 키값?
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 // app.get -> 가져오다
 // app.post-> 생성하다
 // app.put -> 전체 수정

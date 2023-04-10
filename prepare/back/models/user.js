@@ -1,5 +1,3 @@
-const { Dvr } = require("@material-ui/icons");
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User", //MYSQL에는 users 테이블 생성

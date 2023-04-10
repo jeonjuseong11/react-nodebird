@@ -11,6 +11,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!(me && me.id)) {
+      alert("로그인시 이용 가능한 서비스입니다.");
       Router.push("/");
     }
   }, [me && me.id]);

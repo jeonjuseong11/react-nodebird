@@ -117,7 +117,7 @@ const reducer = (state = initialState, action) =>
         break;
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data; //실제 데이터가 들어감
         draft.logInDone = true;
         break;
       case LOG_IN_FAILURE:
