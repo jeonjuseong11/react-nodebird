@@ -7,6 +7,40 @@ const router = express.Router();
 const { User, Post } = require("../models");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
+router.get("/", async (req, res, next) => {
+  //GET /user
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: { exclude: ["password"] }, //원하는 정보만 받기
+        include: [
+          {
+            model: Post, //게시글에 대한 숫자만 셀거기 때문에 id만 가져옴
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followers",
+            attributes: ["id"],
+          },
+        ],
+      });
+      res.status(200).json(fullUserWithoutPassword); //사용자가 있으면 보내고
+    } else {
+      res.status(200).json(null); //없으면 보내지 않는다
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   //POST /user/login
   //미들웨어 확장
@@ -32,14 +66,17 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post,
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followings",
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followers",
+            attributes: ["id"],
           },
         ],
       });
@@ -72,10 +109,10 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
 router.post("/logout", isLoggedIn, (req, res) => {
   //로그아웃 라우터
   console.log(req.user);
-  // req.logout(() => {
-  //   redirect("/");
-  // });
-  // req.session.destroy(); //세션 지우기
-  res.send("ok"); //로그아웃 성공
+  req.logout(() => {
+    res.redirect("/");
+  });
+  // req.session.destroy();
+  // res.send("ok");
 });
 module.exports = router;

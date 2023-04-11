@@ -24,7 +24,7 @@ passportConfig();
 app.use(
   cors({
     origin: true, //보낸 곳의 주소가 자동으로 들어가 편리
-    credentials: false,
+    credentials: true, //쿠키를 같이 전달할 때
   })
 );
 app.use(express.json()); //json 형식의 데이터가 들어왔을 때 req.body안에 넣어줌

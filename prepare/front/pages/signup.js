@@ -18,7 +18,9 @@ const Signup = () => {
     (state) => state.user
   );
   useEffect(() => {
-    Router.replace("/"); //push대신에 replace 뒤로가기 해도 페이지가 나오지 않음
+    if (me && me.id) {
+      Router.replace("/"); //push대신에 replace 뒤로가기 해도 페이지가 나오지 않음
+    }
   }, [me && me.id]);
   useEffect(() => {
     if (signUpDone) {
