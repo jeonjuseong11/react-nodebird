@@ -34,8 +34,11 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev);
   }, []);
 
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   const onRemovePost = useCallback(() => {
@@ -131,7 +134,7 @@ PostCard.propTypes = {
     User: PropTypes.object,
     UserId: PropTypes.number,
     content: PropTypes.string,
-    createdAt: PropTypes.object,
+    createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.any),
     Images: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,

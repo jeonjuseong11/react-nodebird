@@ -7,8 +7,10 @@ const dotenv = require("dotenv");
 
 const db = require("./models");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const passportConfig = require("./passport");
+const morgan = require("morgan");
 
 dotenv.config(); //process.env.이름을 하면 .env파일로 가서 그 값으로 치환됨
 
@@ -20,7 +22,7 @@ db.sequelize
   })
   .catch(console.log(console.error));
 passportConfig();
-
+app.use(morgan("dev"));
 app.use(
   cors({
     origin: true, //보낸 곳의 주소가 자동으로 들어가 편리
@@ -53,22 +55,7 @@ app.get("/", (req, res) => {
 app.get("/", (req, res) => {
   res.send("hello api");
 });
-app.get("/posts", (req, res) => {
-  res.json([
-    {
-      id: 1,
-      content: "hello",
-    },
-    {
-      id: 2,
-      content: "hello2",
-    },
-    {
-      id: 3,
-      content: "hello3",
-    },
-  ]);
-});
+app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 
