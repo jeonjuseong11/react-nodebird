@@ -55,9 +55,9 @@ app.get("/", (req, res) => {
 app.get("/", (req, res) => {
   res.send("hello api");
 });
+app.use("/post", postRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
-app.use("/post", postRouter);
 
 app.listen(3065, () => {
   console.log("서버 실행 중!");

@@ -33,6 +33,11 @@ router.get("/", async (req, res, next) => {
             },
           ],
         },
+        {
+          model: User, //종아요 누른 사람
+          as: "Likers",
+          attributes: ["id"],
+        },
       ],
     });
     console.log(posts); //실행 확인 용

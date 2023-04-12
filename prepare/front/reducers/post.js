@@ -7,6 +7,12 @@ export const initialState = {
   loadPostsLoading: false,
   loadPostsDone: false,
   loadPostsError: null,
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+  unLikePostLoading: false,
+  unLikePostDone: false,
+  unLikePostError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -56,6 +62,38 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case LIKE_POST_REQUEST:
+        draft.likePostLoading = true;
+        draft.likePostDone = false;
+        draft.likePostError = null;
+        break;
+      case LIKE_POST_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Likers.push({ id: action.data.UserId });
+        draft.likePostLoading = false;
+        draft.likePostDone = true;
+        break;
+      }
+      case LIKE_POST_FAILURE:
+        draft.likePostLoading = false;
+        draft.likePostError = action.error;
+        break;
+      case UNLIKE_POST_REQUEST:
+        draft.unLikePostLoading = true;
+        draft.unLikePostDone = false;
+        draft.unLikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
+        draft.unLikePostLoading = false;
+        draft.unLikePostDone = true;
+        break;
+      }
+      case UNLIKE_POST_FAILURE:
+        draft.unLikePostLoading = false;
+        draft.unLikePostError = action.error;
+        break;
       case LOAD_POSTS_REQUEST:
         draft.loadPostsLoading = true;
         draft.loadPostsDone = false;

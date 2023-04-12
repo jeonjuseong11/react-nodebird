@@ -15,6 +15,12 @@ import {
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
@@ -39,6 +45,45 @@ function* loadPosts(action) {
     console.error(err);
     yield put({
       type: LOAD_POSTS_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+function likePostAPI(data) {
+  return axios.patch(`/post/${data}/like`); //게시글 일부 수정이기 때문에 patch
+}
+
+function* likePost(action) {
+  try {
+    const result = yield call(likePostAPI, action.data);
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LIKE_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+function unLikePostAPI(data) {
+  // return axios.patch(`/post/${data}/unlike`, data); 한가지가 아닌 다양한 방법
+  return axios.delete(`/post/${data}/unlike`);
+}
+
+function* unlikePost(action) {
+  try {
+    const result = yield call(unLikePostAPI, action.data);
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNLIKE_POST_FAILURE,
       data: err.response.data,
     });
   }
@@ -113,14 +158,18 @@ function* addComment(action) {
   }
 }
 
-function* watchLoadPosts() {
-  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
-}
-
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
-
+function* watchLoadPosts() {
+  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
+}
+function* watchLikePosts() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+function* watchUnlikePosts() {
+  yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
+}
 function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
@@ -133,6 +182,8 @@ export default function* postSaga() {
   yield all([
     fork(watchAddPost),
     fork(watchLoadPosts),
+    fork(watchLikePosts),
+    fork(watchUnlikePosts),
     fork(watchRemovePost),
     fork(watchAddComment),
   ]);
