@@ -37,16 +37,18 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
       content: req.body.content,
       UserId: req.user.id,
     });
-    if (Array.isArray(req.body.image)) {
-      //이미지를 여러개 올리면 배열로 들어옴
-      const images = await Promise.all(
-        req.body.image.map((image) => Image.create({ src: image })) //db에 파일 주소 저장
-      );
-      await post.addImages(images);
-    } else {
-      //아니면 png로 들어옴
-      const image = await Image.create({ src: req.body.image });
-      await post.addImages(image);
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        // 이미지를 여러 개 올리면 image: [제로초.png, 부기초.png]
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      } else {
+        // 이미지를 하나만 올리면 image: 제로초.png
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
     }
     const fullPost = await Post.findOne({
       where: { id: post.id },
