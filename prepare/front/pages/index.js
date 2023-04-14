@@ -13,7 +13,6 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-
   useEffect(() => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST,

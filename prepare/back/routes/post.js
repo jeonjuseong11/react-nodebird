@@ -3,7 +3,7 @@ const { Post, Comment, Image, User } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const router = express.Router();
 router.post("/", isLoggedIn, async (req, res, next) => {
-  //POST /post
+  // POST /post
   try {
     const post = await Post.create({
       content: req.body.content,
@@ -41,6 +41,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   //POST /post/1/comment
   try {
@@ -71,7 +72,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
-router.patch("/:postId/like", async (req, res, next) => {
+router.patch("/:postId/like", isLoggedIn, async (req, res, next) => {
   //PATCH /post/1/like
   try {
     const post = await Post.findOne({
@@ -87,7 +88,7 @@ router.patch("/:postId/like", async (req, res, next) => {
     next(error);
   }
 });
-router.delete("/:postId/unlike", async (req, res, next) => {
+router.delete("/:postId/unlike", isLoggedIn, async (req, res, next) => {
   //DELETE /post/1/like
   try {
     const post = await Post.findOne({
@@ -103,9 +104,21 @@ router.delete("/:postId/unlike", async (req, res, next) => {
     next(error);
   }
 });
-router.delete("/", (req, res) => {
-  //DELETE /post
-  res.json({ id: 1 });
+
+router.delete("/:postId", isLoggedIn, async (req, res, next) => {
+  // DELETE /post/10
+  try {
+    await Post.destroy({
+      where: {
+        id: req.params.postId,
+        UserId: req.user.id,
+      },
+    });
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;

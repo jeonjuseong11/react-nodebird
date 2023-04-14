@@ -30,25 +30,6 @@ import {
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
-function loadPostsAPI(data) {
-  return axios.get("/posts", data);
-}
-
-function* loadPosts(action) {
-  try {
-    const result = yield call(loadPostsAPI, action.data);
-    yield put({
-      type: LOAD_POSTS_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOAD_POSTS_FAILURE,
-      data: err.response.data,
-    });
-  }
-}
 function likePostAPI(data) {
   return axios.patch(`/post/${data}/like`); //게시글 일부 수정이기 때문에 patch
 }
@@ -89,6 +70,26 @@ function* unlikePost(action) {
   }
 }
 
+function loadPostsAPI(data) {
+  return axios.get("/posts", data);
+}
+
+function* loadPosts(action) {
+  try {
+    const result = yield call(loadPostsAPI, action.data);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
 function addPostAPI(data) {
   return axios.post("/post", { content: data });
 }
@@ -98,11 +99,11 @@ function* addPost(action) {
     const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      content: result.data,
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: result.data.id,
+      data: result.data,
     });
   } catch (err) {
     console.error(err);
@@ -114,16 +115,15 @@ function* addPost(action) {
 }
 
 function removePostAPI(data) {
-  return axios.delete("/api/post", data);
+  return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
   try {
-    // const result = yield call(removePostAPI, action.data);
-    yield delay(1000);
+    const result = yield call(removePostAPI, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
     yield put({
       type: REMOVE_POST_OF_ME,
