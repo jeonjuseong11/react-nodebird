@@ -5,10 +5,21 @@ import Head from "next/head";
 import NicknameEditForm from "../components/NicknameEditForm";
 import FollowList from "../components/FollowList";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWINGS_REQUEST,
+} from "../reducers/user";
 const Profile = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-
+  useEffect(() => {
+    dispatch({
+      type: LOAD_FOLLOWERS_REQUEST,
+    });
+    dispatch({
+      type: LOAD_FOLLOWINGS_REQUEST,
+    });
+  }, []);
   useEffect(() => {
     if (!(me && me.id)) {
       alert("로그인시 이용 가능한 서비스입니다.");
