@@ -14,13 +14,40 @@ try {
   console.error("uploads 폴더가 없어 생성합니다");
   fs.mkdirSync("uploads"); //upload 폴도 생성
 }
-router.post("/", isLoggedIn, async (req, res, next) => {
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads");
+    },
+    filename(req, file, done) {
+      //이미지이름.png
+      const ext = path.extname(file.originalname); //확장자 추출(png)
+      const basename = path.basename(file.originalname, ext); //이미지이름
+      done(null, basename + "_" + new Date().getTime() + ext); //이미지이름12351232.png 같은 파일명 덮어쓰기를 방지하기 위해서 시간을 넣어줌
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   // POST /post
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (Array.isArray(req.body.image)) {
+      //이미지를 여러개 올리면 배열로 들어옴
+      const images = await Promise.all(
+        req.body.image.map((image) => Image.create({ src: image })) //db에 파일 주소 저장
+      );
+      await post.addImages(images);
+    } else {
+      //아니면 png로 들어옴
+      const image = await Image.create({ src: req.body.image });
+      await post.addImages(image);
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -54,20 +81,6 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "uploads");
-    },
-    filename(req, file, done) {
-      //이미지이름.png
-      const ext = path.extname(file.originalname); //확장자 추출(png)
-      const basename = path.basename(file.originalname, ext); //이미지이름
-      done(null, basename + new Date().getTime() + ext); //이미지이름12351232.png 같은 파일명 덮어쓰기를 방지하기 위해서 시간을 넣어줌
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 },
-});
 router.post(
   "/images",
   isLoggedIn,

@@ -96,13 +96,14 @@ const reducer = (state = initialState, action) =>
         draft.removeFollowerError = null;
         draft.removeFollowerDone = false;
         break;
-      case REMOVE_FOLLOWER_SUCCESS:
+      case REMOVE_FOLLOWER_SUCCESS: {
         draft.removeFollowerLoading = false;
         draft.me.Followers = draft.me.Followers.filter(
           (v) => v.id !== action.data.UserId
         );
         draft.removeFollowerDone = true;
         break;
+      }
       case REMOVE_FOLLOWER_FAILURE:
         draft.removeFollowerLoading = false;
         draft.removeFollowerError = action.error;
@@ -134,6 +135,20 @@ const reducer = (state = initialState, action) =>
       case LOAD_FOLLOWERS_FAILURE:
         draft.loadFollowersLoading = false;
         draft.loadFollowersError = action.error;
+        break;
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoError = null;
+        draft.loadMyInfoDone = false;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.me = action.data;
+        draft.loadMyInfoDone = true;
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoError = action.error;
         break;
       case FOLLOW_REQUEST:
         draft.followLoading = true;

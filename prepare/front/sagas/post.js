@@ -106,7 +106,7 @@ function* loadPosts(action) {
 }
 
 function addPostAPI(data) {
-  return axios.post("/post", { content: data });
+  return axios.post("/post", data);
 }
 
 function* addPost(action) {
@@ -118,7 +118,7 @@ function* addPost(action) {
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: result.data,
+      data: result.data.id,
     });
   } catch (err) {
     console.error(err);

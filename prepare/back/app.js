@@ -11,7 +11,7 @@ const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const passportConfig = require("./passport");
 const morgan = require("morgan");
-
+const path = require("path");
 dotenv.config(); //process.env.이름을 하면 .env파일로 가서 그 값으로 치환됨
 
 const app = express();
@@ -29,6 +29,8 @@ app.use(
     credentials: true, //쿠키를 같이 전달할 때
   })
 );
+app.use("/", express.static(path.join(__dirname, "uploads"))); //운영체제에 따라 경로명을 알아서 해주는 것 (이미지 업로드시 미리보기를 위한 것)
+// / 로 표현하여 보안에 뛰어남
 app.use(express.json()); //json 형식의 데이터가 들어왔을 때 req.body안에 넣어줌
 app.use(express.urlencoded({ extended: true })); //form submit 했을때 데이터를 req.body에 넣어줌
 app.use(cookieParser(process.env.COOKIE_SECRET));
