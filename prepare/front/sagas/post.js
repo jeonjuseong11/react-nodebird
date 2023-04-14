@@ -1,26 +1,49 @@
 import axios from "axios";
 import { all, call, fork, put, takeLatest, throttle } from "redux-saga/effects";
 import {
-  ADD_COMMENT_FAILURE,
+  ADD_COMMENT_FAILURE, //댓글 관련
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
-  ADD_POST_FAILURE,
+  ADD_POST_FAILURE, //게시글 관련
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
-  LIKE_POST_FAILURE,
+  LIKE_POST_FAILURE, //좋아요 관련
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
-  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_FAILURE, //좋아요 관련
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
-  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_FAILURE, //게시글 로딩 관련
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
-  REMOVE_POST_FAILURE,
+  REMOVE_POST_FAILURE, //게시글 삭제 관련
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
+  UPLOAD_IMAGES_REQUEST, //이미지 업로드 관련
+  UPLOAD_IMAGES_SUCCESS,
+  UPLOAD_IMAGES_FAILURE,
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
+
+function uploadImagesAPI(data) {
+  return axios.post("/post/images", data); //게시글 일부 수정이기 때문에 patch
+}
+
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
 
 function likePostAPI(data) {
   return axios.patch(`/post/${data}/like`); //게시글 일부 수정이기 때문에 patch
@@ -150,6 +173,9 @@ function* addComment(action) {
   }
 }
 
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
@@ -172,6 +198,7 @@ function* watchAddComment() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchUploadImages),
     fork(watchAddPost),
     fork(watchLoadPosts),
     fork(watchLikePosts),

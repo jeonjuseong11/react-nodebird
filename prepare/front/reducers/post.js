@@ -22,7 +22,14 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  upLoadImagesloading: false,
+  upLoadImagesDone: false,
+  upLoadImagesError: null,
 };
+
+export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
+export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
+export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
 
 export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
 export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
@@ -62,6 +69,21 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case UPLOAD_IMAGES_REQUEST:
+        draft.upLoadImagesloading = true;
+        draft.upLoadImagesDone = false;
+        draft.upLoadImagesError = null;
+        break;
+      case UPLOAD_IMAGES_SUCCESS: {
+        draft.imagePaths = action.data;
+        draft.upLoadImagesloading = false;
+        draft.upLoadImagesDone = true;
+        break;
+      }
+      case UPLOAD_IMAGES_FAILURE:
+        draft.upLoadImagesloading = false;
+        draft.upLoadImagesError = action.error;
+        break;
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
         draft.likePostDone = false;

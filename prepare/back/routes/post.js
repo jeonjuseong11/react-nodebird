@@ -1,7 +1,19 @@
 const express = require("express");
+const multer = require("multer"); //파일 업로드를 도와주는 라이브러리?
+const path = require("path"); //업로드한 파일이름 추출
+const fs = require("fs"); //filestsyem을 조작할 수 있음
+
 const { Post, Comment, Image, User } = require("../models");
 const { isLoggedIn } = require("./middlewares");
+
 const router = express.Router();
+
+try {
+  fs.accessSync("uploads"); //upload폴더 있는지 검사
+} catch (error) {
+  console.error("uploads 폴더가 없어 생성합니다");
+  fs.mkdirSync("uploads"); //upload 폴도 생성
+}
 router.post("/", isLoggedIn, async (req, res, next) => {
   // POST /post
   try {
@@ -41,6 +53,31 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads");
+    },
+    filename(req, file, done) {
+      //이미지이름.png
+      const ext = path.extname(file.originalname); //확장자 추출(png)
+      const basename = path.basename(file.originalname, ext); //이미지이름
+      done(null, basename + new Date().getTime() + ext); //이미지이름12351232.png 같은 파일명 덮어쓰기를 방지하기 위해서 시간을 넣어줌
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+router.post(
+  "/images",
+  isLoggedIn,
+  upload.array("image"), //이미지를 여러개 올릴수 있기 때문에 array로 한장만 올릴거면 single, 입력받는 곳이 2개이상 있으면 fills
+  (req, res, next) => {
+    //POST /post/images
+    console.log(req.files);
+    res.json(req.files.map((v) => v.filename)); //파일명 다시 프론트로 전달
+  }
+);
 
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   //POST /post/1/comment
