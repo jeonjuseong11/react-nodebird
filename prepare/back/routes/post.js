@@ -226,7 +226,7 @@ router.patch("/:postId/like", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
+router.delete("/:postId/unlike", isLoggedIn, async (req, res, next) => {
   // DELETE /post/1/like
   try {
     const post = await Post.findOne({ where: { id: req.params.postId } });
