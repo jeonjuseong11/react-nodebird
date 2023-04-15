@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Hashtag = sequelize.define(
-    "User",
+    "Hashtag",
     {
       // id: {}, mysql에서 자동으로 올라감
       name: {
