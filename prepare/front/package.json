@@ -15,7 +15,6 @@
     "faker": "^4.1.0",
     "immer": "^9.0.21",
     "next": "^9.5.5",
-    "next-redux-wrapper": "^6.0.2",
     "prop-types": "^15.8.1",
     "react-redux": "^8.0.5",
     "react-slick": "^0.29.0",
