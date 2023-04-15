@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Popover, Button, Avatar, List, Comment } from "antd";
@@ -23,10 +23,17 @@ import FollowButton from "./FollowButton";
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
-  const { removePostLoading } = useSelector((state) => state.post);
+  const { removePostLoading, retweetError } = useSelector(
+    (state) => state.post
+  );
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
-
+  // useEffect(() => {
+  //   console.log("rerender");
+  //   if (retweetError) {
+  //     alert(retweetError);
+  //   }
+  // }, [retweetError]);
   const onLike = useCallback(() => {
     if (!id) {
       return alert("로그인이 필요합니다.");
