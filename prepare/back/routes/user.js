@@ -206,11 +206,11 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:userId", async (req, res, next) => {
   // GET /user/3
   try {
     const fullUserWithoutPassword = await User.findOne({
-      where: { id: req.params.id },
+      where: { id: req.params.userId },
       attributes: {
         exclude: ["password"],
       },

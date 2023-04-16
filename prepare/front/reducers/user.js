@@ -1,7 +1,7 @@
 import produce from "immer";
 
 export const initialState = {
-  loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
+  loadMyInfoLoading: false, // 내 유저 정보 가져오기 시도중
   loadMyInfoDone: false,
   loadMyInfoError: null,
   loadUserLoading: false, // 유저 정보 가져오기 시도중

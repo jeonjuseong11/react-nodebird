@@ -2,17 +2,18 @@ import produce from "immer";
 
 export const initialState = {
   mainPosts: [],
+  singlePost: null,
   imagePaths: [],
   hasMorePosts: true,
-  loadPostsLoading: false,
-  loadPostsDone: false,
-  loadPostsError: null,
   likePostLoading: false,
   likePostDone: false,
   likePostError: null,
-  unLikePostLoading: false,
-  unLikePostDone: false,
-  unLikePostError: null,
+  unlikePostLoading: false,
+  unlikePostDone: false,
+  unlikePostError: null,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -22,25 +23,32 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
-  upLoadImagesloading: false,
-  upLoadImagesDone: false,
-  upLoadImagesError: null,
-  retweetloading: false,
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
+  uploadImagesLoading: false,
+  uploadImagesDone: false,
+  uploadImagesError: null,
+  retweetLoading: false,
   retweetDone: false,
   retweetError: null,
 };
 
-export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
+export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
 
-export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
 export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
+export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
 export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
 
-export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
+export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
+
+export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
+export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
+export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
 
 export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
@@ -79,37 +87,37 @@ const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case RETWEET_REQUEST:
-        draft.retweetloading = true;
+        draft.retweetLoading = true;
         draft.retweetDone = false;
         draft.retweetError = null;
         break;
       case RETWEET_SUCCESS: {
-        draft.retweetloading = false;
+        draft.retweetLoading = false;
         draft.retweetDone = true;
         draft.mainPosts.unshift(action.data);
         break;
       }
       case RETWEET_FAILURE:
-        draft.retweetloading = false;
+        draft.retweetLoading = false;
         draft.retweetError = action.error;
         break;
       case REMOVE_IMAGE:
-        draft.imagePaths = draft.imagePaths.filter((v, t) => 1 !== action.data);
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
       case UPLOAD_IMAGES_REQUEST:
-        draft.upLoadImagesloading = true;
-        draft.upLoadImagesDone = false;
-        draft.upLoadImagesError = null;
+        draft.uploadImagesLoading = true;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = null;
         break;
       case UPLOAD_IMAGES_SUCCESS: {
         draft.imagePaths = action.data;
-        draft.upLoadImagesloading = false;
-        draft.upLoadImagesDone = true;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = true;
         break;
       }
       case UPLOAD_IMAGES_FAILURE:
-        draft.upLoadImagesloading = false;
-        draft.upLoadImagesError = action.error;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesError = action.error;
         break;
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
@@ -128,20 +136,34 @@ const reducer = (state = initialState, action) =>
         draft.likePostError = action.error;
         break;
       case UNLIKE_POST_REQUEST:
-        draft.unLikePostLoading = true;
-        draft.unLikePostDone = false;
-        draft.unLikePostError = null;
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
         break;
       case UNLIKE_POST_SUCCESS: {
         const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
         post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
-        draft.unLikePostLoading = false;
-        draft.unLikePostDone = true;
+        draft.unlikePostLoading = false;
+        draft.unlikePostDone = true;
         break;
       }
       case UNLIKE_POST_FAILURE:
-        draft.unLikePostLoading = false;
-        draft.unLikePostError = action.error;
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
+        break;
+      case LOAD_POST_REQUEST:
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
+        break;
+      case LOAD_POST_SUCCESS:
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
+        draft.singlePost = action.data;
+        break;
+      case LOAD_POST_FAILURE:
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
         break;
       case LOAD_POSTS_REQUEST:
         draft.loadPostsLoading = true;

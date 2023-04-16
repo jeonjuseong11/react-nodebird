@@ -54,11 +54,12 @@ const Home = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(
+  //Home 보다 먼저 실행됨
   async (context) => {
     console.log("getServerSideProps start");
     console.log(context.req.headers);
     const cookie = context.req ? context.req.headers.cookie : "";
-    axios.defaults.headers.Cookie = ""; //서버에 쿠키가 있을때만 쿠키를 넣고아니면 쿠기를 제거하여 다른 유저에게 쿠키가 공유되는 문제를 해결
+    axios.defaults.headers.Cookie = ""; //서버에 쿠키가 있을때만 쿠키를 넣고 아니면 쿠기를 제거하여 다른 유저에게 쿠키가 공유되는 문제를 해결
     if (context.req && cookie) {
       axios.defaults.headers.Cookie = cookie;
     }

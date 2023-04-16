@@ -1,3 +1,4 @@
+//getStaticProps 사용해보기
 import React from "react";
 import { useSelector } from "react-redux";
 import Head from "next/head";
@@ -8,7 +9,7 @@ import AppLayout from "../components/AppLayout";
 import wrapper from "../store/configureStore";
 import { LOAD_USER_REQUEST } from "../reducers/user";
 //블로글 계시글처럼 빈번히 수정되지 않는것
-const Profile = () => {
+const About = () => {
   const { userInfo } = useSelector((state) => state.user);
 
   return (
@@ -57,4 +58,4 @@ export const getStaticProps = wrapper.getStaticProps(async (context) => {
   await context.store.sagaTask.toPromise();
 });
 
-export default Profile;
+export default About;
