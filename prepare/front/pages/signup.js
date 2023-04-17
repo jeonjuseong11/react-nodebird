@@ -23,6 +23,8 @@ const Signup = () => {
   );
   useEffect(() => {
     if (me && me.id) {
+      alert("로그인 상태에서 할 수 없습니다.");
+
       //로그인이 성공하면 회원가입 페이지에 못들어오게함
       Router.replace("/"); //push대신에 replace 뒤로가기 해도 페이지가 나오지 않음
     }
