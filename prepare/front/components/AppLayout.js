@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { Col, Input, Menu, Row } from "antd";
@@ -25,7 +25,7 @@ const Global = createGlobalStyle`
 const AppLayout = ({ children }) => {
   const [searchInput, onChangeSearchInput] = useInput("");
   const { me } = useSelector((state) => state.user);
-
+  const { loadPostsLoading } = useSelector((state) => state.post);
   const onSearch = useCallback(() => {
     Router.push(`/hashtag/${searchInput}`);
   }, [searchInput]);
@@ -54,6 +54,8 @@ const AppLayout = ({ children }) => {
         value={searchInput}
         onChange={onChangeSearchInput}
         onSearch={onSearch}
+        placeholder="태그를 입력해주세요"
+        loading={loadPostsLoading}
       />
       <Row gutter={8}>
         <Col xs={24} md={6}>

@@ -9,6 +9,7 @@ import PostCard from "../../components/PostCard";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import AppLayout from "../../components/AppLayout";
+import Link from "next/link";
 
 const Hashtag = () => {
   const dispatch = useDispatch();
@@ -43,9 +44,23 @@ const Hashtag = () => {
 
   return (
     <AppLayout>
-      {mainPosts.map((c) => (
-        <PostCard key={c.id} post={c} />
-      ))}
+      {mainPosts.length != 0 ? (
+        mainPosts.map((c) => <PostCard key={c.id} post={c} />)
+      ) : (
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            top: "35%",
+            left: "35%",
+          }}
+        >
+          <h3> 해당 게시글이 없습니다.</h3>
+          <Link href="/">
+            <a>메인페이지로 돌아가기</a>
+          </Link>
+        </div>
+      )}
     </AppLayout>
   );
 };

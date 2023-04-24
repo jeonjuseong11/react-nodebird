@@ -72,6 +72,7 @@ const PostForm = () => {
         placeholder="어떤 신기한 일이 있었나요?"
         value={text}
         onChange={onChangeText}
+        autoSize
       />
       <div>
         <input
