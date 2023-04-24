@@ -11,7 +11,9 @@ import useInput from "../hooks/useInput";
 import Router from "next/router";
 
 const SearchInput = styled(Input.Search)`
-  vertical-align: middle;
+  padding: 10px;
+  justify-content: center;
+  align-item: center;
 `;
 const Global = createGlobalStyle`
 .ant-row{
@@ -42,20 +44,17 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
         <Menu.Item>
-          <SearchInput
-            enterButton
-            value={searchInput}
-            onChange={onChangeSearchInput}
-            onSearch={onSearch}
-            style={{ verticalAlign: "middle" }}
-          />
-        </Menu.Item>
-        <Menu.Item>
           <Link href="/signup">
             <a>회원가입</a>
           </Link>
         </Menu.Item>
       </Menu>
+      <SearchInput
+        enterButton
+        value={searchInput}
+        onChange={onChangeSearchInput}
+        onSearch={onSearch}
+      />
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {me ? <UserProfile /> : <LoginForm />}
