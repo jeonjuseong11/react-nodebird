@@ -269,7 +269,7 @@ router.patch("/:postId/like", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.delete("/:postId/unlike", isLoggedIn, async (req, res, next) => {
+router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
   // DELETE /post/1/like
   try {
     const post = await Post.findOne({ where: { id: req.params.postId } });
@@ -298,12 +298,10 @@ router.patch("/:postId", isLoggedIn, async (req, res, next) => {
         },
       }
     );
-    res
-      .status(200)
-      .json({
-        PostId: parseInt(req.params.postId, 10),
-        content: req.body.content,
-      });
+    res.status(200).json({
+      PostId: parseInt(req.params.postId, 10),
+      content: req.body.content,
+    });
   } catch (error) {
     console.error(error);
     next(error);
