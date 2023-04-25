@@ -12,6 +12,9 @@ import useInput from "../hooks/useInput";
 import styled from "styled-components";
 import { SIGN_UP_REQUEST, LOAD_MY_INFO_REQUEST } from "../reducers/user";
 
+const SignUpForm = styled(Form)`
+  padding: 10px;
+`;
 const ErrorMessage = styled.div`
   color: red;
 `;
@@ -77,11 +80,11 @@ const Signup = () => {
       <Head>
         <title>회원가입 | NodeBird</title>
       </Head>
-      <Form onFinish={onSubmit}>
+      <SignUpForm onFinish={onSubmit}>
         <div>
-          <label htmlFor="user-email">이메일</label>
-          <br />
+          <label htmlFor="user-email">아이디</label>
           <Input
+            placeholder="이메일 입력"
             name="user-email"
             type="email"
             value={email}
@@ -91,7 +94,6 @@ const Signup = () => {
         </div>
         <div>
           <label htmlFor="user-nickname">닉네임</label>
-          <br />
           <Input
             name="user-nickname"
             value={nickname}
@@ -101,7 +103,6 @@ const Signup = () => {
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>
-          <br />
           <Input
             name="user-password"
             value={password}
@@ -126,7 +127,7 @@ const Signup = () => {
         </div>
         <div>
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-            해당 상황에 동의합니다
+            약관에 동의합니다
           </Checkbox>
           {termError && <ErrorMessage>약관에 동의하셔야 합니다</ErrorMessage>}
         </div>
@@ -135,7 +136,7 @@ const Signup = () => {
             가입하기
           </Button>
         </div>
-      </Form>
+      </SignUpForm>
     </AppLayout>
   );
 };
